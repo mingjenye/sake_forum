@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- New Post Button -->
+    <div class="mb-4">
+        <a href="{% url 'post_create' %}" class="btn btn-primary">Create New Post</a>
+    </div>
+
+    <!-- Posts List -->
+    {% for post in posts %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <!-- Username and Rating -->
+                    <div class="d-flex align-items-center mb-2">
+                        <h5 class="mb-0">{{ post.name }}</h5>
+                        {% if post.rating %}
+                        <div class="ms-3">
+                            <span class="text-warning">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= post.rating %}
+                                        ★
+                                    {% else %}
+                                        ☆
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                            <span class="ms-2">{{ post.rating }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Post Content -->
+                    {% if post.sake_name %}
+                    <h6 class="card-subtitle mb-2">{{ post.sake_name }}</h6>
+                    {% endif %}
+                    <p class="card-text">{{ post.content }}</p>
+
+                    <!-- Metadata in gray brackets -->
+                    <div class="mb-2">
+                        {% if post.purchase_location %}
+                        <span class="text-secondary">[購入場所]</span>
+                        <span class="ms-1">{{ post.purchase_location }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="mb-2">
+                        {% if post.drinking_occasion %}
+                        <span class="text-secondary">[飲んだシーン]</span>
+                        <span class="ms-1">{{ post.drinking_occasion }}</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Date -->
+                    <div class="text-muted small">
+                        {{ post.created_at|date:"Y年n月j日" }}
+                    </div>
+                </div>
+
+                <!-- Post Image -->
+                {% if post.image %}
+                <div class="col-md-4">
+                    <img src="{{ post.image.url }}" class="img-fluid rounded" alt="Post image">
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info">
+        No posts yet. Be the first to post!
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
