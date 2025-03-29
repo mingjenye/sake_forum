@@ -19,3 +19,6 @@ def post_create(request):
         form = PostForm()
     
     return render(request, 'posts/post_create.html', {'form': form})
+
+def homepage(request):
+    return render(request, 'posts/homepage.html')
